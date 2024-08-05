@@ -1,2 +1,3 @@
-# voronoi
+# Voronoi
+
 Voronoi generating lib
