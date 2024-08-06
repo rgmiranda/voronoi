@@ -1,2 +1,2 @@
 export { Triangle } from './triangle';
-export { Voronoi } from './voronoi';
+export { getRectBox, triangulate } from './delaunay';
