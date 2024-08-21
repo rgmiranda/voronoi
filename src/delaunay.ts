@@ -40,7 +40,7 @@ export const getRectBox = (points: Vector[]) : Vector[] => {
   ];
 };
 
-export const triangulate = (points: Vector[], config: DalaunayConfig) : Triangle[]  => {
+export const triangulate = (points: Vector[], config: DalaunayConfig = {}) : Triangle[]  => {
   const [A, B, C, D] = (config.rectBox && config.rectBox.length >= 4) ? config.rectBox : getRectBox(points);
 
   let triangulation = [
