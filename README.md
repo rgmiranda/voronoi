@@ -67,13 +67,15 @@ the resulting box array would be `[E, F, G, H]` (in that order).
 
 ## Tessellation
 
-The `tessellate` function draws the Voronoi tessellation on a `HTMLCanvasElement`.
-It expects a `CanvasRenderingContext2d` and a triangulation (array of `Triangle`).
+The `tessellate` function generates the Voronoi tessellation, represented by an array of `Polygon` instances.
+It expects:
+- `sites` - an array of `Vector` instances, each representing a center of the tessellation
+- `config` - an object with the same properties used for the Delauney triangulation
 
 ```js
 const { triangulate } = require('@rgsoft/voronoi');
 
-const points = [ new Vector(0.5 , 0.5) ];
+const sites = [ new Vector(0.5 , 0.5) ];
 const config = {
     rectBox: [
         new Vector(0, 1),
@@ -83,11 +85,5 @@ const config = {
     ]
 }
 
-const triangulation = triangulate(points, config);
-const canvasElement = document.getElementById('canvas1');
-const context = canvasElement.getContext('2d');
-
-tessellate(context, triangulation);
+const polygons = tessellate(sites, config);
 ```
-
-![Tessellation example](./tessellation.png)
