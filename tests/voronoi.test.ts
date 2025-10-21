@@ -18,14 +18,10 @@ describe(tessellate.name, () => {
       new Vector(Math.random() * 2 + 1, Math.random() * 2 + 1),
       new Vector(Math.random() * 2 + 1, Math.random() * 2 + 1),
     ];
-
-    const triangulation = triangulate(sites, {
+    const voronoi = tessellate(sites.concat(rectBox), {
       excludeRectVertex: false,
-      rectBox,
+      rectBox
     });
-
-    expect(triangulation.length).toBe(6);
-    const voronoi = tessellate(sites.concat(rectBox), triangulation, rectBox);
     expect(voronoi.length).toBe(6);
 
     for (const cell of voronoi) {

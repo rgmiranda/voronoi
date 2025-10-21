@@ -19,7 +19,7 @@ describe(getRectBox.name, () => {
     });
     
     it('triangulates points', () => {
-        const rectBox = [
+        const rectBox: [Vector, Vector, Vector, Vector] = [
             new Vector(0, 3),
             new Vector(3, 3),
             new Vector(3, 0),

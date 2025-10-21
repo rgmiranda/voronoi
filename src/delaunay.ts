@@ -1,13 +1,9 @@
 import { Vector } from "@rgsoft/math";
 import { Triangle } from "./triangle";
+import { TessellationConfig } from "./interfaces";
 
-export interface DalaunayConfig {
-    rectBox?: [Vector, Vector, Vector, Vector],
-    excludeRectVertex?: boolean,
-}
-
-export const getRectBox = (points: Vector[]): [Vector, Vector, Vector, Vector] => {
-  if (points.length === 0) {
+export const getRectBox = (sites: Vector[]): [Vector, Vector, Vector, Vector] => {
+  if (sites.length === 0) {
     throw new Error("No points received");
   }
 
@@ -16,7 +12,7 @@ export const getRectBox = (points: Vector[]): [Vector, Vector, Vector, Vector] =
   let maxX = Number.MIN_SAFE_INTEGER;
   let maxY = Number.MIN_SAFE_INTEGER;
 
-  points.forEach((p) => {
+  sites.forEach((p) => {
     if (p.x > maxX) {
       maxX = p.x;
     }
@@ -39,7 +35,7 @@ export const getRectBox = (points: Vector[]): [Vector, Vector, Vector, Vector] =
   ];
 };
 
-export const triangulate = (points: Vector[], config: DalaunayConfig = {}) : Triangle[]  => {
+export const triangulate = (points: Vector[], config: TessellationConfig = {}) : Triangle[]  => {
   const [A, B, C, D] = (config.rectBox && config.rectBox.length >= 4) ? config.rectBox : getRectBox(points);
 
   let triangulation = [

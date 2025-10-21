@@ -1,15 +1,17 @@
 import { Vector } from '@rgsoft/math';
-import { Triangle } from './triangle';
 import { Polygon } from './polygon';
+import { triangulate } from './delaunay';
+import { TessellationConfig } from './interfaces';
 
 export const tessellate = (
-  points: Vector[],
-  triangulation: Triangle[],
-  rectBox: [ Vector, Vector, Vector, Vector ] | null = null
+  sites: Vector[],
+  config: TessellationConfig = {},
 ): Polygon[] => {
   const polygons: Polygon[] = [];
+  config = Object.assign({ excludeRectVertex: false }, config);
+  const triangulation = triangulate(sites, config);
 
-  for (const site of points) {
+  for (const site of sites) {
     const incidentTriangles = triangulation.filter((t) => t.hasVertex(site));
 
     if (incidentTriangles.length < 2) {
@@ -23,7 +25,7 @@ export const tessellate = (
       const a2 = Math.atan2(p2.y - site.y, p2.x - site.x);
       return a1 - a2;
     });
-    const v = rectBox?.find((v) => v.equals(site));
+    const v = config.rectBox?.find((v) => v.equals(site));
     if (v) {
       centers.push(v);
     }
