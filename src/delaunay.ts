@@ -2,14 +2,13 @@ import { Vector } from "@rgsoft/math";
 import { Triangle } from "./triangle";
 
 export interface DalaunayConfig {
-    rectBox?: Vector[]
+    rectBox?: [Vector, Vector, Vector, Vector],
     excludeRectVertex?: boolean,
 }
 
-export const getRectBox = (points: Vector[]) : Vector[] => {
-
-  if(points.length === 0) {
-    throw new Error('No points received');
+export const getRectBox = (points: Vector[]): [Vector, Vector, Vector, Vector] => {
+  if (points.length === 0) {
+    throw new Error("No points received");
   }
 
   let minX = Number.MAX_SAFE_INTEGER;

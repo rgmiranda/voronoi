@@ -1,50 +1,53 @@
-import { Vector } from "@rgsoft/math";
-import { FillOptions, StrokeOptions } from "./types";
+import { Vector } from '@rgsoft/math';
 
 export class Polygon {
-  constructor(private readonly _points: Vector[]) {
+  readonly vertices: Vector[];
+  readonly site?: Vector; // opcional, el punto generador
 
+  constructor(vertices: Vector[], site?: Vector) {
+    this.vertices = vertices;
+    this.site = site;
   }
 
-  stroke(ctx: CanvasRenderingContext2D, strokeOptions: StrokeOptions) {
-    if (strokeOptions.strokeStyle) {
-      ctx.strokeStyle = strokeOptions.strokeStyle;
-    }
-    if (strokeOptions.lineWidth) {
-      ctx.lineWidth = strokeOptions.lineWidth;
-    }
-    if (strokeOptions.lineCap) {
-      ctx.lineCap = strokeOptions.lineCap;
-    }
-    ctx.beginPath();
-    this._points.forEach((p, i) => {
-      if (i === 0) {
-        ctx.moveTo(p.x, p.y);
-      } else {
-        ctx.lineTo(p.x, p.y);
-      }
+  get centroid(): Vector {
+    let x = 0,
+      y = 0;
+    this.vertices.forEach((v) => {
+      x += v.x;
+      y += v.y;
     });
-    ctx.closePath();
-    ctx.stroke();
+    return new Vector(x / this.vertices.length, y / this.vertices.length);
   }
 
-  fill(ctx: CanvasRenderingContext2D, fillOptions: FillOptions) {
-    if (fillOptions.fillStyle) {
-      ctx.fillStyle = fillOptions.fillStyle;
+  contains(p: Vector): boolean {
+    let inside = false;
+    const n = this.vertices.length;
+    for (let i = 0, j = n - 1; i < n; j = i++) {
+      const xi = this.vertices[i].x,
+        yi = this.vertices[i].y;
+      const xj = this.vertices[j].x,
+        yj = this.vertices[j].y;
+      const intersect =
+        yi > p.y !== yj > p.y &&
+        p.x < ((xj - xi) * (p.y - yi)) / (yj - yi) + xi;
+      if (intersect) inside = !inside;
     }
-    ctx.beginPath();
-    this._points.forEach((p, i) => {
-      if (i === 0) {
-        ctx.moveTo(p.x, p.y);
-      } else {
-        ctx.lineTo(p.x, p.y);
-      }
-    });
-    ctx.closePath();
-    ctx.fill();
+    return inside;
   }
 
-  get points(): Vector[] {
-    return [ ...this._points ];
+  containsOrOnEdge(p: Vector): boolean {
+    return this.contains(p) || this.isOnEdge(p);
   }
-};
+
+  isOnEdge(p: Vector, tolerance = 1e-9): boolean {
+    const n = this.vertices.length;
+    for (let i = 0; i < n; i++) {
+      const a = this.vertices[i];
+      const b = this.vertices[(i + 1) % n];
+      const cross = (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x);
+      const dot = (p.x - a.x) * (p.x - b.x) + (p.y - a.y) * (p.y - b.y);
+      if (Math.abs(cross) < tolerance && dot <= 0) return true;
+    }
+    return false;
+  }
+}
