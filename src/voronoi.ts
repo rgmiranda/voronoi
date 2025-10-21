@@ -5,11 +5,14 @@ import { TessellationConfig } from './interfaces';
 
 export const tessellate = (
   sites: Vector[],
-  config: TessellationConfig = {},
+  config: TessellationConfig,
 ): Polygon[] => {
   const polygons: Polygon[] = [];
-  config = Object.assign({ excludeRectVertex: false }, config);
+
   const triangulation = triangulate(sites, config);
+  if (!config.excludeRectVertex && config.rectBox) {
+    sites = sites.concat(config.rectBox);
+  }
 
   for (const site of sites) {
     const incidentTriangles = triangulation.filter((t) => t.hasVertex(site));

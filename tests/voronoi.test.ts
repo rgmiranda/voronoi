@@ -18,7 +18,7 @@ describe(tessellate.name, () => {
       new Vector(Math.random() * 2 + 1, Math.random() * 2 + 1),
       new Vector(Math.random() * 2 + 1, Math.random() * 2 + 1),
     ];
-    const voronoi = tessellate(sites.concat(rectBox), {
+    const voronoi = tessellate(sites, {
       excludeRectVertex: false,
       rectBox
     });
