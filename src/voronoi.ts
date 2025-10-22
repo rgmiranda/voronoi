@@ -9,7 +9,7 @@ export const tessellate = (
 ): Polygon[] => {
   const polygons: Polygon[] = [];
 
-  const triangulation = triangulate(sites, config);
+  const triangulation = triangulate(sites, { ...config, excludeRectVertex: false });
   if (!config.excludeRectVertex && config.rectBox) {
     sites = sites.concat(config.rectBox);
   }
@@ -28,10 +28,6 @@ export const tessellate = (
       const a2 = Math.atan2(p2.y - site.y, p2.x - site.x);
       return a1 - a2;
     });
-    const v = config.rectBox?.find((v) => v.equals(site));
-    if (v) {
-      centers.push(v);
-    }
 
     polygons.push(new Polygon(centers, site));
   }

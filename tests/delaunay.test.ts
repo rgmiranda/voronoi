@@ -43,11 +43,11 @@ describe(getRectBox.name, () => {
     });
     
     it('eliminates the rect box points', () => {
-        const rectBox = [
-            new Vector(0, 3),
-            new Vector(3, 3),
-            new Vector(3, 0),
-            new Vector(0, 0),
+        const rectBox: [Vector, Vector, Vector, Vector] = [
+          new Vector(0, 3),
+          new Vector(3, 3),
+          new Vector(3, 0),
+          new Vector(0, 0),
         ];
         const pts = [
             new Vector(1, 1),
