@@ -18,6 +18,11 @@ describe(getRectBox.name, () => {
         expect(d.equals(new Vector(-2, -2))).toBe(true);
     });
     
+    it('fails on no sites', () => {
+        const pts: Vector[] = [];
+        expect(() => getRectBox(pts)).toThrowError("No points received");
+    });
+    
     it('triangulates points', () => {
         const rectBox: [Vector, Vector, Vector, Vector] = [
             new Vector(0, 3),

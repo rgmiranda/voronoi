@@ -43,6 +43,12 @@ describe(Triangle.name, () => {
         expect(t.hasEdge(p, q)).toBe(false);
     });
 
+    it('fails on colinear points', () => {
+        let p: Vector;
+        expect(() => new Triangle(new Vector(0, 0), new Vector(1, 1), new Vector(2, 2)))
+        .toThrowError('The points are colinear');
+    });
+
     it('detects vertex of the triangle', () => {
         let p: Vector;
         const t = new Triangle(new Vector(0, 0), new Vector(0, 1), new Vector(1, 0));
